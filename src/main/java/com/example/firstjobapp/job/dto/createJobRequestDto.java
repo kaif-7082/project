@@ -12,8 +12,8 @@ public class createJobRequestDto {
     private String description;
 
 
-    private String minSalary;
-    private String maxSalary;
+    private Integer minSalary;
+    private Integer maxSalary;
 
     @NotEmpty(message = "Location cannot be empty")
     private String location;
@@ -46,19 +46,19 @@ public class createJobRequestDto {
         this.description = description;
     }
 
-    public String getMinSalary() {
+    public Integer getMinSalary() {
         return minSalary;
     }
 
-    public void setMinSalary(String minSalary) {
+    public void setMinSalary(Integer minSalary) {
         this.minSalary = minSalary;
     }
 
-    public String getMaxSalary() {
+    public Integer getMaxSalary() {
         return maxSalary;
     }
 
-    public void setMaxSalary(String maxSalary) {
+    public void setMaxSalary(Integer maxSalary) {
         this.maxSalary = maxSalary;
     }
 

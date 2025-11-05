@@ -11,8 +11,8 @@ public class Job {
     private Long id;
     private String title;
     private String description;
-    private String minSalary;
-    private String maxSalary;
+    private Integer minSalary;
+    private Integer maxSalary;
     private String location;
 
     // @JsonIgnore ADDED here
@@ -24,7 +24,7 @@ public class Job {
 
     }
 
-    public Job(Long id, String title, String description, String minSalary, String maxSalary, String location) {
+    public Job(Long id, String title, String description, Integer minSalary, Integer maxSalary, String location) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -65,19 +65,19 @@ public class Job {
         this.title = title;
     }
 
-    public String getMinSalary() {
+    public Integer getMinSalary() {
         return minSalary;
     }
 
-    public void setMinSalary(String minSalary) {
+    public void setMinSalary(Integer minSalary) {
         this.minSalary = minSalary;
     }
 
-    public String getMaxSalary() {
+    public Integer getMaxSalary() {
         return maxSalary;
     }
 
-    public void setMaxSalary(String maxSalary) {
+    public void setMaxSalary(Integer maxSalary) {
         this.maxSalary = maxSalary;
     }
 
