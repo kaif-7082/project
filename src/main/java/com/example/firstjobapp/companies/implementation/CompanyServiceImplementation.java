@@ -1,0 +1,83 @@
+package com.example.firstjobapp.companies.implementation;
+
+import com.example.firstjobapp.companies.Company;
+import com.example.firstjobapp.companies.CompanyRepository;
+import com.example.firstjobapp.companies.CompanyService;
+import com.example.firstjobapp.companies.dto.companyRequestDto;
+import com.example.firstjobapp.companies.dto.companyResponseDto;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class CompanyServiceImplementation implements CompanyService {
+
+    private CompanyRepository companyRepository;
+
+    public CompanyServiceImplementation(CompanyRepository companyRepository) {
+        this.companyRepository = companyRepository;
+    }
+
+
+    @Override
+    public List<companyResponseDto> getAllCompanies() {
+        List<Company> companies = companyRepository.findAll();
+        List<companyResponseDto> responseDtos = new ArrayList<>();
+
+        for (Company company : companies) {
+            companyResponseDto dto = new companyResponseDto();
+            dto.setId(company.getId());
+            dto.setName(company.getName());
+            dto.setDescription(company.getDescription());
+            responseDtos.add(dto);
+        }
+        return responseDtos;
+    }
+
+    @Override
+    public boolean updateCompany(companyRequestDto companyDto, Long id) {
+        Optional<Company> companyOptional = companyRepository.findById(id);
+        if (companyOptional.isPresent()) {
+            Company company = companyOptional.get();
+            company.setName(companyDto.getName());
+            company.setDescription(companyDto.getDescription());
+            companyRepository.save(company);
+            return true;
+        }
+        return false;
+    }
+
+
+    @Override
+    public void createCompany(companyRequestDto companyDto) {
+        Company company = new Company();
+        company.setName(companyDto.getName());
+        company.setDescription(companyDto.getDescription());
+        
+
+        companyRepository.save(company);
+    }
+
+    @Override
+    public boolean deleteCompanyById(Long id) {
+        if(companyRepository.existsById(id)) {
+            companyRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Company getCompanyById(Long id) {
+        return companyRepository.findById(id).orElse(null);
+    }
+
+    // ADDED: New sorting method
+    @Override
+    public List<Company> findCompaniesWithSorting(String field) {
+        return companyRepository.findAll(Sort.by(Sort.Direction.DESC, field));
+    }
+}

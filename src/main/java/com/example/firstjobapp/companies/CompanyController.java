@@ -1,0 +1,69 @@
+package com.example.firstjobapp.companies;
+
+import com.example.firstjobapp.companies.dto.companyRequestDto;
+import com.example.firstjobapp.companies.dto.companyResponseDto;
+import jakarta.validation.Valid; // ADD
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/companies")
+public class CompanyController {
+    private CompanyService companyService;
+
+    public CompanyController(CompanyService companyService) {
+        this.companyService = companyService;
+    }
+
+
+    @GetMapping
+    public ResponseEntity<List<companyResponseDto>> getAllCompanies() {
+        return new ResponseEntity<>(companyService.getAllCompanies(), HttpStatus.OK);
+    }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateCompany(@PathVariable Long id,
+                                                @Valid @RequestBody companyRequestDto companyDto) {
+        boolean updated = companyService.updateCompany(companyDto, id);
+        if (updated) {
+            return new ResponseEntity<>("Company updated", HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+
+    @PostMapping
+    public ResponseEntity<String> createCompany(@Valid @RequestBody companyRequestDto companyDto) {
+        companyService.createCompany(companyDto);
+        return new ResponseEntity<>("Company created", HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteCompanyById(@PathVariable Long id) {
+        boolean deleted = companyService.deleteCompanyById(id);
+        if (deleted) {
+            return new ResponseEntity<>("Company deleted", HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Company> getCompanyById(@PathVariable Long id) {
+        Company company = companyService.getCompanyById(id);
+        if (company != null) {
+            return new ResponseEntity<>(company, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+
+    @GetMapping("/sorted/{field}")
+    public ResponseEntity<List<Company>> findSortedCompanies(@PathVariable String field) {
+        List<Company> sortedCompanies = companyService.findCompaniesWithSorting(field);
+        return ResponseEntity.ok(sortedCompanies);
+    }
+}
