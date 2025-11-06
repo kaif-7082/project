@@ -7,6 +7,8 @@ import com.example.firstjobapp.job.JobRepository;
 import com.example.firstjobapp.job.JobService;
 import com.example.firstjobapp.job.dto.createJobRequestDto;
 import com.example.firstjobapp.job.dto.userResponseDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import com.example.firstjobapp.job.dto.LocationCount;
@@ -41,7 +43,7 @@ public class JobServiceImplementation implements JobService {
         return userResponse;
     }
 
-    // METHOD MODIFIED
+
     @Override
     public void createJob(createJobRequestDto createRequest) {
         Job job = new Job();
@@ -51,7 +53,7 @@ public class JobServiceImplementation implements JobService {
         job.setMaxSalary(createRequest.getMaxSalary());
         job.setLocation(createRequest.getLocation());
 
-        // LOGIC CHANGED: Now throws an error if company not found
+
         Company company = companyRepository.findById(createRequest.getCompanyId())
                 .orElseThrow(() -> new RuntimeException("Company not found with id: " + createRequest.getCompanyId()));
 
@@ -74,7 +76,7 @@ public class JobServiceImplementation implements JobService {
         return false;
     }
 
-    // METHOD MODIFIED
+
     @Override
     public boolean updateJob(Long id, createJobRequestDto updatedJob) {
         Optional<Job> optionalJob = jobRepository.findById(id);
@@ -87,7 +89,6 @@ public class JobServiceImplementation implements JobService {
             job.setMaxSalary(updatedJob.getMaxSalary());
             job.setLocation(updatedJob.getLocation());
 
-            // LOGIC CHANGED: Now throws an error if company not found
             Company company = companyRepository.findById(updatedJob.getCompanyId())
                     .orElseThrow(() -> new RuntimeException("Company not found with id: " + updatedJob.getCompanyId()));
 
@@ -122,5 +123,11 @@ public class JobServiceImplementation implements JobService {
     @Override
     public List<LocationCount> getLocationCounts() {
         return jobRepository.getLocationCounts();
+    }
+
+    @Override
+    public Page<Job> findJobsWithPagination(int page, int pageSize) {
+        Page<Job> jobs=jobRepository.findAll(PageRequest.of(page, pageSize));
+        return jobs;
     }
 }

@@ -4,6 +4,7 @@ import com.example.firstjobapp.job.dto.LocationCount;
 import com.example.firstjobapp.job.dto.createJobRequestDto;
 import com.example.firstjobapp.job.dto.userResponseDTO;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -85,4 +86,12 @@ public class JobController {
         List<LocationCount> stats = jobService.getLocationCounts();
         return ResponseEntity.ok(stats);
     }
+
+    @GetMapping("/pagination/{page}/{pageSize}")
+    public ResponseEntity<Page<Job>> getJobsWithPagination(@PathVariable int page, @PathVariable int pageSize) {
+        Page<Job> jobs = jobService.findJobsWithPagination(page, pageSize);
+        return ResponseEntity.ok(jobs);
+    }
+
+
 }
