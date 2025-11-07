@@ -26,8 +26,12 @@ public interface JobService {
     List<Job> findjobswithSorting(String field);
 
     List<Job> findJobsByLocation(String location);
+
     List<Job> findJobsByMinSalaryGreaterThan(Integer salary);
+
     List<Job> searchJobs(String query);
+
     List<LocationCount> getLocationCounts();
+
     Page<Job> findJobsWithPagination(int page, int pageSize);
 }
